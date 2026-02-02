@@ -1,0 +1,51 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:vps_main/src/feature/onboarding/presentation/widgets/widgets.dart';
+
+class AppDropdownInput<T> extends StatelessWidget {
+  AppDropdownInput(
+      {final Key? key,
+      this.lableText,
+      final this.space,
+      final this.dropDownSize,
+      final this.border,
+      final this.hasHint,
+      required final this.keyIdentifier,
+      required final this.data,
+      InputDecoration? decoration})
+      : super(key: key);
+
+  String? lableText;
+  double? space;
+  double? dropDownSize;
+  String keyIdentifier;
+  InputBorder? border;
+  String? hasHint;
+
+  final DropDownData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0),
+      child: FormBuilderDropdown(
+        name: keyIdentifier,
+        decoration: InputDecoration(
+          border: border,
+          hintText: hasHint,
+        ),
+        allowClear: true,
+        validator:
+            FormBuilderValidators.compose([FormBuilderValidators.required()]),
+        items: data
+            .map((item) => DropdownMenuItem(
+                  value: item,
+                  child: AutoSizeText('$item'),
+                ))
+            .toList(),
+      ),
+    );
+  }
+}
