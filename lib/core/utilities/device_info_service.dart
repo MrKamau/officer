@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:officer/core/utilities/logging_utils.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DeviceInfoService {
   static const MethodChannel _channel = MethodChannel('device_info');
@@ -398,5 +400,127 @@ class DeviceInfoService {
       'mac_address': macAddress ?? '',
       'build_number': buildNumber ?? '',
     };
+  }
+
+  /// Gets FCM token for push notifications
+  static Future<String?> getFcmToken() async {
+    try {
+      logger.i('Attempting to get FCM token...');
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        logger.i('✅ FCM token retrieved: ${fcmToken.substring(0, 20)}...');
+        return fcmToken;
+      }
+      logger.w('FCM token is null or empty');
+      return null;
+    } catch (e) {
+      logger.e('Error getting FCM token: $e');
+      return null;
+    }
+  }
+
+  /// Gets device type based on platform
+  static Future<String> getDeviceType() async {
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+        if (Platform.isAndroid) {
+          return 'mobile';
+        } else if (Platform.isIOS) {
+          final iosInfo = await deviceInfo.iosInfo;
+          // Check if iPad
+          if (iosInfo.model.toLowerCase().contains('ipad')) {
+            return 'tablet';
+          }
+          return 'mobile';
+        }
+      } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+        return 'desktop';
+      }
+      return 'mobile'; // Default
+    } catch (e) {
+      logger.e('Error getting device type: $e');
+      return 'mobile';
+    }
+  }
+
+  /// Request phone state permission (for serial number on Android)
+  static Future<bool> requestPhoneStatePermission() async {
+    try {
+      if (Platform.isAndroid) {
+        final status = await Permission.phone.status;
+        if (status.isDenied) {
+          logger.i('Requesting READ_PHONE_STATE permission...');
+          final result = await Permission.phone.request();
+          return result.isGranted;
+        }
+        return status.isGranted;
+      }
+      return true; // Not needed on other platforms
+    } catch (e) {
+      logger.e('Error requesting phone state permission: $e');
+      return false;
+    }
+  }
+
+  /// Collects all device information for registration
+  /// Returns a map ready to be sent to the API
+  static Future<Map<String, dynamic>> collectDeviceRegistrationInfo() async {
+    logger.i('========================================');
+    logger.i('[DeviceInfoService] Starting device info collection');
+    logger.i('========================================');
+
+    // Request permissions if needed
+    await requestPhoneStatePermission();
+
+    // Collect all device information
+    final deviceId = await getDeviceId();
+    final deviceName = await getDeviceName();
+    final serialNumber = await getDeviceSerial();
+    final deviceType = await getDeviceType();
+    final imei = await getDeviceImei();
+    final fcmToken = await getFcmToken();
+    final macAddress = await getMacAddress();
+    final buildNumber = await getBuildNumber();
+
+    // Ensure required fields are never null
+    final finalDeviceId = deviceId?.isNotEmpty == true
+        ? deviceId!
+        : 'DEV-${DateTime.now().millisecondsSinceEpoch}';
+
+    final finalDeviceName = deviceName?.isNotEmpty == true
+        ? deviceName!
+        : 'Unknown Device';
+
+    final finalSerialNumber = serialNumber?.isNotEmpty == true
+        ? serialNumber!
+        : finalDeviceId;
+
+    final payload = {
+      'device_id': finalDeviceId,
+      'device_name': finalDeviceName,
+      'serial_number': finalSerialNumber,
+      'device_type': deviceType,
+      'imei': imei ?? '',
+      'fcm_token': fcmToken ?? '',
+      'mac_address': macAddress ?? '',
+      'build_number': buildNumber ?? '',
+    };
+
+    logger.i('[DeviceInfoService] Device Registration Payload:');
+    logger.i('[DeviceInfoService] {');
+    logger.i('[DeviceInfoService]   "device_id": "${payload['device_id']}"');
+    logger.i('[DeviceInfoService]   "device_name": "${payload['device_name']}"');
+    logger.i('[DeviceInfoService]   "serial_number": "${payload['serial_number']}"');
+    logger.i('[DeviceInfoService]   "device_type": "${payload['device_type']}"');
+    logger.i('[DeviceInfoService]   "imei": "${payload['imei']}"');
+    logger.i('[DeviceInfoService]   "fcm_token": "${(payload['fcm_token'] as String).isNotEmpty ? '${(payload['fcm_token'] as String).substring(0, 20)}...' : ''}"');
+    logger.i('[DeviceInfoService]   "mac_address": "${payload['mac_address']}"');
+    logger.i('[DeviceInfoService]   "build_number": "${payload['build_number']}"');
+    logger.i('[DeviceInfoService] }');
+    logger.i('========================================');
+
+    return payload;
   }
 }

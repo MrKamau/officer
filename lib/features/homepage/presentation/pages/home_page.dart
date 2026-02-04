@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:officer/core/data/datasources/local_storage_data_source.dart';
+import 'package:officer/core/presentation/widgets/nps_app_bar.dart';
 import 'package:officer/theme/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadOfficerName() async {
     final name = await getData('name');
     setState(() {
-      _officerName = name ?? 'Officer';
+      _officerName = (name != null && name.isNotEmpty) ? name : 'Officer';
       _isLoading = false;
     });
   }
@@ -30,11 +31,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Officer Dashboard'),
-        backgroundColor: primaryNavy,
-        foregroundColor: Colors.white,
-      ),
+      backgroundColor: backgroundLight,
+      appBar: const NpsAppBar(),
       body: Center(
         child: _isLoading
             ? const CircularProgressIndicator()

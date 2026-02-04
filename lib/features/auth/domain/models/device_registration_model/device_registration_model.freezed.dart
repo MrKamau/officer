@@ -35,6 +35,12 @@ mixin _$DeviceRegistrationModel {
   @JsonKey(name: 'device_type')
   String? get deviceType => throw _privateConstructorUsedError;
   String? get imei => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fcm_token')
+  String? get fcmToken => throw _privateConstructorUsedError;
+  @JsonKey(name: 'mac_address')
+  String? get macAddress => throw _privateConstructorUsedError;
+  @JsonKey(name: 'build_number')
+  String? get buildNumber => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_active')
   bool? get isActive => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
@@ -42,6 +48,12 @@ mixin _$DeviceRegistrationModel {
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_updated')
+  String? get lastUpdated => throw _privateConstructorUsedError;
+  @JsonKey(name: 'post_count')
+  int? get postCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fcm_token_updated')
+  bool? get fcmTokenUpdated => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -64,10 +76,16 @@ abstract class $DeviceRegistrationModelCopyWith<$Res> {
       @JsonKey(name: 'station_name') String? stationName,
       @JsonKey(name: 'device_type') String? deviceType,
       String? imei,
+      @JsonKey(name: 'fcm_token') String? fcmToken,
+      @JsonKey(name: 'mac_address') String? macAddress,
+      @JsonKey(name: 'build_number') String? buildNumber,
       @JsonKey(name: 'is_active') bool? isActive,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      String? token});
+      String? token,
+      @JsonKey(name: 'last_updated') String? lastUpdated,
+      @JsonKey(name: 'post_count') int? postCount,
+      @JsonKey(name: 'fcm_token_updated') bool? fcmTokenUpdated});
 }
 
 /// @nodoc
@@ -92,10 +110,16 @@ class _$DeviceRegistrationModelCopyWithImpl<$Res,
     Object? stationName = freezed,
     Object? deviceType = freezed,
     Object? imei = freezed,
+    Object? fcmToken = freezed,
+    Object? macAddress = freezed,
+    Object? buildNumber = freezed,
     Object? isActive = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? token = freezed,
+    Object? lastUpdated = freezed,
+    Object? postCount = freezed,
+    Object? fcmTokenUpdated = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -130,6 +154,18 @@ class _$DeviceRegistrationModelCopyWithImpl<$Res,
           ? _value.imei
           : imei // ignore: cast_nullable_to_non_nullable
               as String?,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      macAddress: freezed == macAddress
+          ? _value.macAddress
+          : macAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      buildNumber: freezed == buildNumber
+          ? _value.buildNumber
+          : buildNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
       isActive: freezed == isActive
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
@@ -146,6 +182,18 @@ class _$DeviceRegistrationModelCopyWithImpl<$Res,
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postCount: freezed == postCount
+          ? _value.postCount
+          : postCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fcmTokenUpdated: freezed == fcmTokenUpdated
+          ? _value.fcmTokenUpdated
+          : fcmTokenUpdated // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -168,10 +216,16 @@ abstract class _$$DeviceRegistrationModelImplCopyWith<$Res>
       @JsonKey(name: 'station_name') String? stationName,
       @JsonKey(name: 'device_type') String? deviceType,
       String? imei,
+      @JsonKey(name: 'fcm_token') String? fcmToken,
+      @JsonKey(name: 'mac_address') String? macAddress,
+      @JsonKey(name: 'build_number') String? buildNumber,
       @JsonKey(name: 'is_active') bool? isActive,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      String? token});
+      String? token,
+      @JsonKey(name: 'last_updated') String? lastUpdated,
+      @JsonKey(name: 'post_count') int? postCount,
+      @JsonKey(name: 'fcm_token_updated') bool? fcmTokenUpdated});
 }
 
 /// @nodoc
@@ -195,10 +249,16 @@ class __$$DeviceRegistrationModelImplCopyWithImpl<$Res>
     Object? stationName = freezed,
     Object? deviceType = freezed,
     Object? imei = freezed,
+    Object? fcmToken = freezed,
+    Object? macAddress = freezed,
+    Object? buildNumber = freezed,
     Object? isActive = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? token = freezed,
+    Object? lastUpdated = freezed,
+    Object? postCount = freezed,
+    Object? fcmTokenUpdated = freezed,
   }) {
     return _then(_$DeviceRegistrationModelImpl(
       id: freezed == id
@@ -233,6 +293,18 @@ class __$$DeviceRegistrationModelImplCopyWithImpl<$Res>
           ? _value.imei
           : imei // ignore: cast_nullable_to_non_nullable
               as String?,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      macAddress: freezed == macAddress
+          ? _value.macAddress
+          : macAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      buildNumber: freezed == buildNumber
+          ? _value.buildNumber
+          : buildNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
       isActive: freezed == isActive
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
@@ -249,6 +321,18 @@ class __$$DeviceRegistrationModelImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postCount: freezed == postCount
+          ? _value.postCount
+          : postCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fcmTokenUpdated: freezed == fcmTokenUpdated
+          ? _value.fcmTokenUpdated
+          : fcmTokenUpdated // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -265,10 +349,16 @@ class _$DeviceRegistrationModelImpl implements _DeviceRegistrationModel {
       @JsonKey(name: 'station_name') this.stationName,
       @JsonKey(name: 'device_type') this.deviceType,
       this.imei,
+      @JsonKey(name: 'fcm_token') this.fcmToken,
+      @JsonKey(name: 'mac_address') this.macAddress,
+      @JsonKey(name: 'build_number') this.buildNumber,
       @JsonKey(name: 'is_active') this.isActive,
       @JsonKey(name: 'created_at') this.createdAt,
       @JsonKey(name: 'updated_at') this.updatedAt,
-      this.token});
+      this.token,
+      @JsonKey(name: 'last_updated') this.lastUpdated,
+      @JsonKey(name: 'post_count') this.postCount,
+      @JsonKey(name: 'fcm_token_updated') this.fcmTokenUpdated});
 
   factory _$DeviceRegistrationModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$DeviceRegistrationModelImplFromJson(json);
@@ -296,6 +386,15 @@ class _$DeviceRegistrationModelImpl implements _DeviceRegistrationModel {
   @override
   final String? imei;
   @override
+  @JsonKey(name: 'fcm_token')
+  final String? fcmToken;
+  @override
+  @JsonKey(name: 'mac_address')
+  final String? macAddress;
+  @override
+  @JsonKey(name: 'build_number')
+  final String? buildNumber;
+  @override
   @JsonKey(name: 'is_active')
   final bool? isActive;
   @override
@@ -306,10 +405,19 @@ class _$DeviceRegistrationModelImpl implements _DeviceRegistrationModel {
   final DateTime? updatedAt;
   @override
   final String? token;
+  @override
+  @JsonKey(name: 'last_updated')
+  final String? lastUpdated;
+  @override
+  @JsonKey(name: 'post_count')
+  final int? postCount;
+  @override
+  @JsonKey(name: 'fcm_token_updated')
+  final bool? fcmTokenUpdated;
 
   @override
   String toString() {
-    return 'DeviceRegistrationModel(id: $id, deviceId: $deviceId, deviceName: $deviceName, serialNumber: $serialNumber, policeStationId: $policeStationId, stationName: $stationName, deviceType: $deviceType, imei: $imei, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, token: $token)';
+    return 'DeviceRegistrationModel(id: $id, deviceId: $deviceId, deviceName: $deviceName, serialNumber: $serialNumber, policeStationId: $policeStationId, stationName: $stationName, deviceType: $deviceType, imei: $imei, fcmToken: $fcmToken, macAddress: $macAddress, buildNumber: $buildNumber, isActive: $isActive, createdAt: $createdAt, updatedAt: $updatedAt, token: $token, lastUpdated: $lastUpdated, postCount: $postCount, fcmTokenUpdated: $fcmTokenUpdated)';
   }
 
   @override
@@ -331,13 +439,25 @@ class _$DeviceRegistrationModelImpl implements _DeviceRegistrationModel {
             (identical(other.deviceType, deviceType) ||
                 other.deviceType == deviceType) &&
             (identical(other.imei, imei) || other.imei == imei) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken) &&
+            (identical(other.macAddress, macAddress) ||
+                other.macAddress == macAddress) &&
+            (identical(other.buildNumber, buildNumber) ||
+                other.buildNumber == buildNumber) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated) &&
+            (identical(other.postCount, postCount) ||
+                other.postCount == postCount) &&
+            (identical(other.fcmTokenUpdated, fcmTokenUpdated) ||
+                other.fcmTokenUpdated == fcmTokenUpdated));
   }
 
   @JsonKey(ignore: true)
@@ -352,10 +472,16 @@ class _$DeviceRegistrationModelImpl implements _DeviceRegistrationModel {
       stationName,
       deviceType,
       imei,
+      fcmToken,
+      macAddress,
+      buildNumber,
       isActive,
       createdAt,
       updatedAt,
-      token);
+      token,
+      lastUpdated,
+      postCount,
+      fcmTokenUpdated);
 
   @JsonKey(ignore: true)
   @override
@@ -374,18 +500,25 @@ class _$DeviceRegistrationModelImpl implements _DeviceRegistrationModel {
 
 abstract class _DeviceRegistrationModel implements DeviceRegistrationModel {
   factory _DeviceRegistrationModel(
-      {final int? id,
-      @JsonKey(name: 'device_id') final String? deviceId,
-      @JsonKey(name: 'device_name') final String? deviceName,
-      @JsonKey(name: 'serial_number') final String? serialNumber,
-      @JsonKey(name: 'policeStationId') final int? policeStationId,
-      @JsonKey(name: 'station_name') final String? stationName,
-      @JsonKey(name: 'device_type') final String? deviceType,
-      final String? imei,
-      @JsonKey(name: 'is_active') final bool? isActive,
-      @JsonKey(name: 'created_at') final DateTime? createdAt,
-      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-      final String? token}) = _$DeviceRegistrationModelImpl;
+          {final int? id,
+          @JsonKey(name: 'device_id') final String? deviceId,
+          @JsonKey(name: 'device_name') final String? deviceName,
+          @JsonKey(name: 'serial_number') final String? serialNumber,
+          @JsonKey(name: 'policeStationId') final int? policeStationId,
+          @JsonKey(name: 'station_name') final String? stationName,
+          @JsonKey(name: 'device_type') final String? deviceType,
+          final String? imei,
+          @JsonKey(name: 'fcm_token') final String? fcmToken,
+          @JsonKey(name: 'mac_address') final String? macAddress,
+          @JsonKey(name: 'build_number') final String? buildNumber,
+          @JsonKey(name: 'is_active') final bool? isActive,
+          @JsonKey(name: 'created_at') final DateTime? createdAt,
+          @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+          final String? token,
+          @JsonKey(name: 'last_updated') final String? lastUpdated,
+          @JsonKey(name: 'post_count') final int? postCount,
+          @JsonKey(name: 'fcm_token_updated') final bool? fcmTokenUpdated}) =
+      _$DeviceRegistrationModelImpl;
 
   factory _DeviceRegistrationModel.fromJson(Map<String, dynamic> json) =
       _$DeviceRegistrationModelImpl.fromJson;
@@ -413,6 +546,15 @@ abstract class _DeviceRegistrationModel implements DeviceRegistrationModel {
   @override
   String? get imei;
   @override
+  @JsonKey(name: 'fcm_token')
+  String? get fcmToken;
+  @override
+  @JsonKey(name: 'mac_address')
+  String? get macAddress;
+  @override
+  @JsonKey(name: 'build_number')
+  String? get buildNumber;
+  @override
   @JsonKey(name: 'is_active')
   bool? get isActive;
   @override
@@ -423,6 +565,15 @@ abstract class _DeviceRegistrationModel implements DeviceRegistrationModel {
   DateTime? get updatedAt;
   @override
   String? get token;
+  @override
+  @JsonKey(name: 'last_updated')
+  String? get lastUpdated;
+  @override
+  @JsonKey(name: 'post_count')
+  int? get postCount;
+  @override
+  @JsonKey(name: 'fcm_token_updated')
+  bool? get fcmTokenUpdated;
   @override
   @JsonKey(ignore: true)
   _$$DeviceRegistrationModelImplCopyWith<_$DeviceRegistrationModelImpl>

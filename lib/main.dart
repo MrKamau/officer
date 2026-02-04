@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:officer/core/config/app_config.dart';
+import 'package:officer/core/data/datasources/secure_storage_data_source.dart';
 import 'package:officer/core/domain/di/configure_dependencies.dart';
 import 'package:officer/features/auth/presentation/state/auth_cubit.dart';
 import 'package:officer/features/auth/presentation/pages/login.dart';
@@ -13,21 +14,39 @@ void main() async {
   // Initialize environment configuration (load .env file)
   await AppConfig.initialize();
 
+  // Initialize secure storage for sensitive data
+  initializeSecureStorage();
+
   // Initialize dependency injection
   await configureDependencies();
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final AuthCubit _authCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _authCubit = KiwiContainer().resolve<AuthCubit>();
+    // Register device on app startup (runs silently in background)
+    _authCubit.registerDevice();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(
-          create: (_) => KiwiContainer().resolve<AuthCubit>(),
+        BlocProvider<AuthCubit>.value(
+          value: _authCubit,
         ),
       ],
       child: MaterialApp(

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:officer/core/data/datasources/local_storage_data_source.dart';
 import 'package:officer/core/data/network_datasource/network_service.dart';
 import 'package:officer/core/data/network_datasource/network_service_impl.dart';
 import 'package:officer/core/utilities/error_helpers.dart';
@@ -20,13 +19,9 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<AuthModel> login(Map<String, dynamic> payload) async {
-    String? deviceToken = await getData('device_token');
     var response = await _networkService.postHttp(AuthEndpoints.login,
         body: jsonEncode(payload),
-        tokenRequired: false,
-        headers: {
-          'Device-Token': deviceToken,
-        });
+        tokenRequired: false);
 
     if (response['error'] != null) {
       await handleApiFailure(
@@ -44,14 +39,10 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<TodayAttendance> checkIn() async {
-    String? deviceToken = await getData('device_token');
     var response = await _networkService.postHttp(
       AuthEndpoints.attendanceCheckIn,
       body: jsonEncode({}),
       tokenRequired: true,
-      headers: {
-        'Device-Token': deviceToken,
-      },
     );
 
     if (response['error'] != null) {
@@ -70,18 +61,13 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<TodayAttendance> checkOut() async {
-    logger.i("ccdcd checking out");
-    String? deviceToken = await getData('device_token');
+    logger.i("checking out");
     var response = await _networkService.postHttp(
       AuthEndpoints.attendanceCheckOut,
       body: jsonEncode({}),
       tokenRequired: true,
-      headers: {
-        'Device-Token': deviceToken,
-      },
     );
 
-    logger.i('Check-out response: $response');
     if (response['error'] != null) {
       await handleApiFailure(
         source: 'checkOut',
@@ -102,24 +88,19 @@ class AuthDataSourceImpl implements AuthDataSource {
     required String pin,
     String? notes,
   }) async {
-    String? deviceToken = await getData('device_token');
-    
     final payload = <String, dynamic>{
       'service_number': serviceNumber,
       'pin': pin,
     };
-    
+
     if (notes != null && notes.isNotEmpty) {
       payload['notes'] = notes;
     }
-    
+
     var response = await _networkService.postHttp(
       AuthEndpoints.attendanceToggle,
       body: jsonEncode(payload),
       tokenRequired: false, // This endpoint uses service_number and pin for auth
-      headers: {
-        'Device-Token': deviceToken,
-      },
     );
 
     if (response['error'] != null) {
@@ -133,19 +114,14 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     logger.i('Toggle attendance response: $response');
 
-    // Return the full response including message and action
     return response;
   }
 
   @override
   Future<TodayAttendance> getTodayAttendance() async {
-    String? deviceToken = await getData('device_token');
     var response = await _networkService.getHttp(
       AuthEndpoints.attendanceToday,
       tokenRequired: true,
-      headers: {
-        'Device-Token': deviceToken,
-      },
     );
 
     if (response['error'] != null) {
@@ -164,13 +140,9 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<List<AttendanceHistoryItem>> getAttendanceHistory() async {
-    String? deviceToken = await getData('device_token');
     var response = await _networkService.getHttp(
       AuthEndpoints.attendanceHistory,
       tokenRequired: true,
-      headers: {
-        'Device-Token': deviceToken,
-      },
     );
 
     if (response['error'] != null) {

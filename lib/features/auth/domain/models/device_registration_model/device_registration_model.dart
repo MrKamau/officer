@@ -14,10 +14,16 @@ class DeviceRegistrationModel with _$DeviceRegistrationModel {
     @JsonKey(name: 'station_name') String? stationName,
     @JsonKey(name: 'device_type') String? deviceType,
     String? imei,
+    @JsonKey(name: 'fcm_token') String? fcmToken,
+    @JsonKey(name: 'mac_address') String? macAddress,
+    @JsonKey(name: 'build_number') String? buildNumber,
     @JsonKey(name: 'is_active') bool? isActive,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     String? token,
+    @JsonKey(name: 'last_updated') String? lastUpdated,
+    @JsonKey(name: 'post_count') int? postCount,
+    @JsonKey(name: 'fcm_token_updated') bool? fcmTokenUpdated,
   }) = _DeviceRegistrationModel;
 
   factory DeviceRegistrationModel.fromJson(Map<String, dynamic> json) =>

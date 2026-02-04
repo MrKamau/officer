@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:officer/core/data/datasources/local_storage_data_source.dart';
+import 'package:officer/core/data/datasources/secure_storage_data_source.dart';
 import 'package:officer/core/domain/usecase/usecase_typedefs.dart';
 import 'package:officer/core/utilities/logging_utils.dart';
 import 'package:officer/features/auth/domain/models/auth_model/auth_model.dart';
-import 'package:officer/features/auth/domain/models/device_registration_model/device_registration_model.dart';
 import 'package:officer/features/auth/domain/models/auth_model/today_attendance.dart';
 import 'package:officer/features/auth/domain/models/attendance_model/attendance_response.dart';
 import 'package:officer/features/auth/domain/usecase/login_usecase.dart';
@@ -65,45 +65,26 @@ class AuthCubit extends Cubit<AuthState> {
     });
   }
 
-  Future<DeviceRegistrationModel> registerDevice(
-      Map<String, dynamic> payload) async {
-    final result = await _registerDeviceUseCase(payload);
-    return result.fold((l) {
-      logger.i(
-          'Device registration response: id=${l.id}, token=${l.token}, deviceId=${l.deviceId}, stationName=${l.stationName}');
-      // Store device token if present
-      if (l.token != null && l.token!.isNotEmpty) {
-        storeData("device_token", l.token!);
-        logger.i('Device token stored successfully: ${l.token}');
-      } else {
-        // If no token, store device ID as fallback identifier
-        if (l.deviceId != null && l.deviceId!.isNotEmpty) {
-          storeData("device_token", l.deviceId!);
-          logger.i('Device ID stored as device_token: ${l.deviceId}');
-        } else if (l.id != null) {
-          storeData("device_token", l.id.toString());
-          logger.i("device_token stored: ${l.id.toString()}");
-          storeData("police_station_name", l.stationName!);
-          logger.i('Device registration ID stored as device_token: ${l.id}');
-        } else {
-          logger.w(
-              'No token, deviceId, or id found in device registration response');
-        }
-      }
-
-      // Store station name if present
-      if (l.stationName != null && l.stationName!.isNotEmpty) {
-        storeData("police_station_name", l.stationName!);
-        logger.i('Station name stored successfully: ${l.stationName}');
-      } else {
-        logger.w('No station name found in device registration response');
-      }
-
-      return l;
-    }, (r) {
-      logger.e('Device registration error: ${r.message}');
-      throw Exception(r.message);
-    });
+  /// Register device silently on app startup
+  /// Does not emit loading/success/error states
+  /// Runs in background and stores device token securely
+  Future<void> registerDevice() async {
+    try {
+      final result = await _registerDeviceUseCase(const NoParams());
+      result.fold(
+        (deviceToken) async {
+          if (deviceToken != null && deviceToken.isNotEmpty) {
+            await storeSecureData('device_registration_token', deviceToken);
+            logger.i('✅ Device registration token stored securely');
+          } else {
+            logger.w('⚠️ Device registration token not returned by server');
+          }
+        },
+        (error) => logger.w('Device registration failed: ${error.message}'),
+      );
+    } catch (e) {
+      logger.e('Error during device registration: $e');
+    }
   }
 
   Future<TodayAttendance> checkIn() async {

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../utilities/logging_utils.dart';
 import '../datasources/local_storage_data_source.dart';
+import '../datasources/secure_storage_data_source.dart';
 import 'config.dart';
 
 class RestClient {
@@ -24,22 +25,28 @@ class RestClient {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         logger.i(
-            "--checking token-required: ${options.extra['token-required']}, device-token-required: ${options.extra['device-token-required']}");
+            "--checking token-required: ${options.extra['token-required']}");
 
-        // Handle user authentication token
-        if (options.extra['token-required'] == true) {
-          final token = await getData('token');
-          final deviceToken = await getData('device_token');
-          logger.i("deviceToken: $deviceToken");
-          logger.i("token: $token");
+        // Add device registration token to all requests
+        final deviceToken = await getSecureData('device_registration_token');
+        if (deviceToken != null && deviceToken.isNotEmpty) {
           options.headers.addAll({
             "Device-Token": deviceToken,
           });
+          logger.d("Device-Token header added to request");
+        } else {
+          logger.w("Device registration token not found in secure storage");
+        }
+
+        // Handle user authentication token for protected endpoints
+        if (options.extra['token-required'] == true) {
+          final token = await getData('token');
+          logger.i("token: $token");
+
           if (token != null && token.isNotEmpty) {
             options.headers.addAll({
               "Authorization": "Bearer $token",
             });
-
             logger.i("User token added to request headers");
           } else {
             logger.w("Token required but not found in storage");
